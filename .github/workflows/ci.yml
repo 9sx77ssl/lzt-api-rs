@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+env:
+  CARGO_TERM_COLOR: always
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: rust
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        components: rustfmt, clippy
+
+    - name: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+    - name: codegen
+      run: cargo run --bin lzt-codegen -- check
+
+    - name: fmt
+      run: |
+        rustfmt --edition 2021 --check build.rs src/bin/lzt-codegen.rs src/client.rs src/codegen.rs src/error.rs tests/generated_parity.rs tests/runtime_behavior.rs examples/basic_usage.rs examples/forum_example.rs examples/market_example.rs examples/test_api.rs
+        rustfmt --edition 2021 --config skip_children=true --check src/lib.rs src/forum/mod.rs src/market/mod.rs
+
+    - name: clippy
+      run: cargo clippy --workspace --all-targets -- -D warnings
+
+    - name: test
+      run: cargo test --verbose
+
+    - name: doc
+      run: cargo doc --no-deps
+
+    - name: build
+      run: cargo build --release
+
+    - name: package
+      run: cargo package --allow-dirty
+
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: publish
+      env:
+        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+      run: cargo publish

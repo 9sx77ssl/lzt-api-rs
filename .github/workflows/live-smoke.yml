@@ -1,0 +1,23 @@
+name: Live Smoke
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
+
+env:
+  CARGO_TERM_COLOR: always
+  LZT_API_TOKEN: ${{ secrets.LZT_API_TOKEN }}
+
+jobs:
+  smoke:
+    if: env.LZT_API_TOKEN != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: smoke
+        run: cargo run --example test_api --release

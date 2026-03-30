@@ -1,0 +1,22 @@
+# Rust
+/target/
+**/target/
+Cargo.lock
+
+# Secrets
+*.token
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.rs.bk

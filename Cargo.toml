@@ -1,0 +1,31 @@
+[package]
+name = "lzt-api"
+version = "1.0.0"
+edition = "2021"
+authors = ["Lolzteam API Contributors"]
+description = "Production-ready Rust API wrapper for Lolzteam Forum and Market services"
+license = "MIT"
+repository = "https://github.com/noki44ngel/lzt-api-rs"
+readme = "README.md"
+keywords = ["api", "lolzteam", "forum", "market", "async"]
+categories = ["api-bindings", "web-programming::http-client"]
+
+[dependencies]
+reqwest = { version = "0.12", features = ["json", "multipart", "rustls-tls", "socks"], default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+thiserror = "2"
+tracing = "0.1"
+urlencoding = "2.1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+wiremock = "0.6"
+
+[build-dependencies]
+serde_json = "1"
+
+[[example]]
+name = "test_api"
+path = "examples/test_api.rs"
