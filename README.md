@@ -1,7 +1,7 @@
 # lzt-api
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![CI](https://github.com/noki44ngel/lzt-api-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/noki44ngel/lzt-api-rs/actions/workflows/ci.yml)
+[![CI](https://github.com/9sx77ssl/lzt-api-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/9sx77ssl/lzt-api-rs/actions/workflows/ci.yml)
 
 Rust API wrapper for LOLZTEAM Forum and Market generated from the official `forum.json` and `market.json` OpenAPI schemas.
 
